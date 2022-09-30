@@ -68,13 +68,13 @@ def mars_news(browser):
     # Add try/except for error handling
     try:
         # Find a div tag with the list_text class attribute value
-        slide_elem = news_soup.select_one('div.list_text')
+        slide_element = news_soup.select_one('div.list_text')
 
         # Use the parent element to find the first anchor tag and save it as news_title
-        news_title = slide_elem.find('div', class_='content_title').get_text()
+        news_title = slide_element.find('div', class_='content_title').get_text()
 
         # Use the parent element to find the paragraph text
-        news_paragraph = slide_elem.find('div', class_='article_teaser_body').get_text()
+        news_paragraph = slide_element.find('div', class_='article_teaser_body').get_text()
 
     # Account for AttributeErrors
     except AttributeError:
@@ -91,27 +91,27 @@ def featured_image(browser):
     browser.visit(url)
 
     # Find and click on the full image button
-    full_image_elem = browser.find_by_tag('button')[1]
-    full_image_elem.click()
+    full_image_element = browser.find_by_tag('button')[1]
+    full_image_element.click()
 
     # Store and parse the resulting HTML using BeautifulSoup
     html = browser.html
-    img_soup = soup(html, 'html.parser')
+    image_soup = soup(html, 'html.parser')
 
     # Add try/except for error handling
     try:
         # Find the relative image URL
-        img_url_rel = img_soup.find('img', class_='fancybox-image').get('src')
+        image_url_relative = image_soup.find('img', class_='fancybox-image').get('src')
 
     # Account for AttributeErrors
     except AttributeError:
         return None
 
     # Use the base URL of the webpage to create an absolute URL for an image
-    img_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{img_url_rel}'
+    image_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{image_url_relative}'
 
     # Return the image's absolute URL
-    return img_url
+    return image_url
 
 # Define the mars facts data collection function
 def mars_facts():
@@ -156,20 +156,20 @@ def mars_hemisphere_data(browser):
 
         # Store and parse the resulting HTML using BeautifulSoup
         html = browser.html
-        img_soup = soup(html, 'html.parser')
+        image_soup = soup(html, 'html.parser')
 
         # Find the relative URL of an image tag with a class of wide-image
-        img_url_rel = img_soup.find('img', class_='wide-image').get('src')
+        image_url_relative = image_soup.find('img', class_='wide-image').get('src')
 
         # Create an absolute URL using the relative image URL above
-        img_url = f'https://marshemispheres.com/{img_url_rel}'
+        image_url = f'https://marshemispheres.com/{image_url_relative}'
 
         # Find an h2 tag with a class attribute value of title
-        title = img_soup.find('h2', class_='title').get_text()
+        title = image_soup.find('h2', class_='title').get_text()
         
         # Add the image URL to a list and a dictionary 
-        hemisphere_image_urls.append(img_url)
-        hemisphere["img_url"]=img_url
+        hemisphere_image_urls.append(image_url)
+        hemisphere["image_url"]=image_url
 
         # Add the titles to a list and a dictionary
         hemisphere_titles.append(title)
